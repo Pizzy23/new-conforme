@@ -1,0 +1,346 @@
+definitions:
+  base.BaseReq:
+    properties:
+      LogData:
+        $ref: '#/definitions/base.LogData'
+      ResponseData:
+        $ref: '#/definitions/base.ResponseData'
+    type: object
+  base.LogData:
+    properties:
+      ExecutionTime:
+        type: string
+      HttpStatusCode:
+        type: integer
+      IP:
+        type: string
+      Route:
+        type: string
+    type: object
+  base.ResponseData:
+    properties:
+      Response: {}
+    type: object
+  db.Company:
+    properties:
+      area:
+        type: string
+      cnpj:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  db.Painel:
+    properties:
+      control_copy:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      number:
+        type: string
+      panel_type:
+        type: string
+      review:
+        type: string
+      sector_id:
+        type: integer
+    type: object
+  db.Sector:
+    properties:
+      company_id:
+        type: integer
+      content:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      number:
+        type: string
+    type: object
+  erros.InternalServerError:
+    properties:
+      BaseReq:
+        $ref: '#/definitions/base.BaseReq'
+      InternalServerError:
+        $ref: '#/definitions/erros.Message'
+      Response: {}
+    type: object
+  erros.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  interfaces.CompanyInput:
+    properties:
+      area:
+        type: string
+      cnpj:
+        type: string
+      company:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      type:
+        type: string
+    required:
+    - area
+    - cnpj
+    - company
+    - email
+    - name
+    - password
+    - type
+    type: object
+  interfaces.PainelInput:
+    properties:
+      control_copy:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      number:
+        type: string
+      panel_type:
+        type: string
+      review:
+        type: string
+      sector_id:
+        type: integer
+    type: object
+  interfaces.SectorInput:
+    properties:
+      company_id:
+        type: integer
+      content:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      name:
+        type: string
+      number:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/test-token:
+    post:
+      consumes:
+      - application/json
+      description: Cria um toke para auth do usuario
+      parameters:
+      - default: Bearer <token>
+        description: Token de autenticação
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'token make:'
+          schema:
+            type: string
+      summary: Test Token
+      tags:
+      - Auth
+  /create-painels:
+    post:
+      consumes:
+      - application/json
+      description: Criar um novo painel para uma empresa
+      parameters:
+      - description: Dados do campo a ser criado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interfaces.PainelInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Painel'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Criar painel
+      tags:
+      - Sector
+  /create-sector:
+    post:
+      consumes:
+      - application/json
+      description: Criar um novo setor para uma empresa
+      parameters:
+      - description: Dados do campo a ser criado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interfaces.SectorInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Sector'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Criar setor
+      tags:
+      - Sector
+  /find-company:
+    get:
+      consumes:
+      - application/json
+      description: Procurar uma companhia existente
+      parameters:
+      - description: Company do usuario
+        in: header
+        name: Company
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Company'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Procurar uma companhia
+      tags:
+      - Company
+  /find-painel:
+    get:
+      consumes:
+      - application/json
+      description: Procurar um Painel existente
+      parameters:
+      - description: Painel que deseja buscar
+        in: header
+        name: Painel
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Painel'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Procurar um Painel
+      tags:
+      - Company
+  /find-sector:
+    get:
+      consumes:
+      - application/json
+      description: Procurar um setor especifico
+      parameters:
+      - description: Company do usuario
+        in: header
+        name: Company
+        required: true
+        type: string
+      - description: Nome do setor
+        in: header
+        name: NameSector
+        required: true
+        type: string
+      - description: Numero do setor
+        in: header
+        name: NumberSector
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Sector'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Procurar setor
+      tags:
+      - Sector
+  /register-company:
+    post:
+      consumes:
+      - application/json
+      description: Criar uma nova companhia
+      parameters:
+      - description: Dados do campo a ser criado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interfaces.CompanyInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Company'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Criar uma nova companhia
+      tags:
+      - Company
+  /token:
+    get:
+      consumes:
+      - application/json
+      description: Cria um toke para auth do usuario
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'token make:'
+          schema:
+            type: string
+      summary: Criar token de auth
+      tags:
+      - Auth
+swagger: "2.0"
