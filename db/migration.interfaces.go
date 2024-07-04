@@ -81,6 +81,7 @@ type SectorTest struct {
 }
 
 type PdfTest struct {
-	ID      uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
-	Content []byte `json:"content" xorm:"'content' BLOB"`
+	ID       uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
+	FileName string `json:"fileName" xorm:"'file_name'"`
+	Content  []byte `json:"content" xorm:"'content' BLOB"`
 }

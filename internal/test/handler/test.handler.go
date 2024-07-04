@@ -96,7 +96,9 @@ func CreatePdfTest(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file"})
 		return
 	}
-	test.CreatePdfService(c, contentBytes)
+
+	// Save the PDF with its name
+	test.CreatePdfService(c, file.Filename, contentBytes)
 }
 
 // @Summary Puxa todos os PDFs
@@ -108,5 +110,5 @@ func CreatePdfTest(c *gin.Context) {
 // @Failure 500 {object} erros.InternalServerError "Error"
 // @Router /all-find-pdfs [get]
 func SearchAllTestPdfs(c *gin.Context) {
-	test.AllPanel(c)
+	test.AllPdfs(c)
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func AllPanel(c *gin.Context) {
-	var Sector db.SectorTest
+	var Sector []db.SectorTest
 	engine, ok := helpers.GetDBEngineFromContext(c)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to DB engine"})
@@ -24,7 +24,7 @@ func AllPanel(c *gin.Context) {
 	c.JSON(http.StatusOK, Sector)
 }
 func AllPdfs(c *gin.Context) {
-	var Pdfs db.PdfTest
+	var Pdfs []db.PdfTest
 	engine, ok := helpers.GetDBEngineFromContext(c)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to DB engine"})
@@ -62,23 +62,23 @@ func CreateSectorTestService(c *gin.Context, data interfaces.SectorInputTest) {
 	c.JSON(http.StatusOK, gin.H{"Response": Sector})
 }
 
-func CreatePdfService(c *gin.Context, data []byte) {
-	var Sector db.PdfTest
+func CreatePdfService(c *gin.Context, fileName string, contentBytes []byte) {
 	engine, ok := helpers.GetDBEngineFromContext(c)
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to DB engine"})
 		return
 	}
 
-	Sector = db.PdfTest{
-		Content: data,
+	pdf := db.PdfTest{
+		FileName: fileName,
+		Content:  contentBytes,
 	}
 
-	err := db.Create(engine, &Sector)
+	err := db.Create(engine, &pdf)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"Response": Sector})
+	c.JSON(http.StatusOK, gin.H{"Response": pdf})
 }
