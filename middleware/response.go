@@ -22,7 +22,6 @@ func (w *responseWriter) Write(data []byte) (int, error) {
 
 func ResponseHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		file, err := os.OpenFile("logfile.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -33,26 +32,21 @@ func ResponseHandler() gin.HandlerFunc {
 		customWriter := &responseWriter{ResponseWriter: c.Writer, body: make([]byte, 0)}
 		c.Writer = customWriter
 
-		c.Next()
-
-		responseData := gin.H{}
-		typeResponse := ""
-		if response, ok := c.Get("Response"); ok {
-			responseData["Response"] = response
-			typeResponse = "NormalRes"
-		}
-		if response, ok := c.Get("Error"); ok {
-			responseData["Response"] = response
-			typeResponse = "Error"
-		}
-
 		startTime := time.Now()
-		route := c.FullPath()
-		clientIP := c.ClientIP()
-
+		c.Next()
 		endTime := time.Now()
 		executionTime := endTime.Sub(startTime)
 
+		responseData := gin.H{}
+		if response, ok := c.Get("Response"); ok {
+			responseData["Response"] = response
+		}
+		if response, ok := c.Get("Error"); ok {
+			responseData["Error"] = response
+		}
+
+		route := c.FullPath()
+		clientIP := c.ClientIP()
 		httpStatusCode := c.Writer.Status()
 
 		logData := gin.H{
@@ -61,18 +55,9 @@ func ResponseHandler() gin.HandlerFunc {
 			"HttpStatusCode": httpStatusCode,
 			"IP":             clientIP,
 		}
-		combinedData := gin.H{}
-		if typeResponse == "Error" {
-			combinedData = gin.H{
-				"LogData": logData,
-				"Data":    responseData,
-			}
-		}
-		if typeResponse == "NormalRes" {
-			combinedData = gin.H{
-				"LogData": logData,
-				"Data":    responseData,
-			}
+		combinedData := gin.H{
+			"LogData": logData,
+			"Data":    responseData,
 		}
 
 		logString := fmt.Sprintf("ExecutionTime: %s, Route: %s, HttpStatusCode: %d, IP: %s\n",
@@ -89,8 +74,11 @@ func ResponseHandler() gin.HandlerFunc {
 			return
 		}
 
-		c.Header("Content-Type", "application/json")
-		c.Writer.WriteHeader(httpStatusCode)
-		c.Writer.Write(responseJSON)
+		// Envia a resposta apenas se ainda não tiver sido enviada
+		if !c.Writer.Written() {
+			c.Header("Content-Type", "application/json")
+			c.Writer.WriteHeader(httpStatusCode)
+			c.Writer.Write(responseJSON)
+		}
 	}
 }

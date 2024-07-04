@@ -29,27 +29,6 @@ func CreateSector(c *gin.Context) {
 	sector.CreateSectorService(c, data)
 }
 
-// @Summary Criar painel
-// @Tags Sector
-// @Description Criar um novo painel para uma empresa
-// @Accept json
-// @Produce json
-// @Param request body interfaces.PainelInput true "Dados do campo a ser criado"
-// @Success 200 {object} db.Painel
-// @Failure 500 {object} erros.InternalServerError "Error"
-// @Router /create-painels [post]
-func CreatePainel(c *gin.Context) {
-	var data interfaces.PainelInput
-
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.Set("Error", "Invalid parameters, need a JSON")
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
-	sector.CreatePainelService(c, data)
-}
-
 // @Summary Procurar setor
 // @Tags Sector
 // @Description Procurar um setor especifico
@@ -69,16 +48,35 @@ func SearchSector(c *gin.Context) {
 	sector.SearchSectorService(c, nameSector, company, numberSector)
 }
 
-// @Summary Procurar um Painel
-// @Tags Company
+// @Summary Criar painel Test
+// @Tags Test
+// @Description Criar um novo painel para uma empresa
+// @Accept json
+// @Produce json
+// @Param request body interfaces.SectorInputTest true "Dados do campo a ser criado"
+// @Success 200 {object} db.SectorTest
+// @Failure 500 {object} erros.InternalServerError "Error"
+// @Router /create-painels-test [post]
+func CreatePainelTest(c *gin.Context) {
+	var data interfaces.SectorInputTest
+
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.Set("Error", "Invalid parameters, need a JSON")
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	sector.CreateSectorTestService(c, data)
+}
+
+// @Summary Puxa todos os painels
+// @Tags Test
 // @Description Procurar um Painel existente
 // @Accept json
 // @Produce json
-// @Param Painel header string true "Painel que deseja buscar"
-// @Success 200 {object} db.Painel
+// @Success 200 {object} db.SectorTest
 // @Failure 500 {object} erros.InternalServerError "Error"
-// @Router /find-painel [get]
-func SearchPainel(c *gin.Context) {
-	name := c.GetHeader("Painel")
-	sector.SearchPanelService(c, name)
+// @Router /all-find-painel [get]
+func SearchAllTestPainel(c *gin.Context) {
+	sector.AllPanel(c)
 }

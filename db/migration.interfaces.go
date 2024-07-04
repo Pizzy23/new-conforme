@@ -1,7 +1,7 @@
 package db
 
 type Company struct {
-	ID   uint64 `json:"id" xorm:"'id' notnull pk autoincr`
+	ID   uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
 	Name string `json:"name" xorm:"'name' VARCHAR(100) notnull"`
 	Area string `json:"area" xorm:"'area' VARCHAR(100) notnull"`
 	Type string `json:"type" xorm:"'type' VARCHAR(100) notnull"`
@@ -9,9 +9,9 @@ type Company struct {
 }
 
 type Word struct {
-	ID         uint64   `json:"id" xorm:"'id' notnull pk autoincr"`
-	Word       string   `json:"word" xorm:"'word' notnull"`
-	Categories Category `json:"category" xorm:"'category'"`
+	ID         uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
+	Word       string `json:"word" xorm:"'word' notnull"`
+	Categories string `json:"category" xorm:"'category'"`
 }
 
 type NotConform struct {
@@ -35,7 +35,7 @@ type Painel struct {
 	ControlCopy string `json:"control_copy" xorm:"'control_copy' VARCHAR(50) notnull"`
 }
 
-type PDA struct {
+type Pda struct {
 	ID          uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
 	SectorID    uint64 `json:"sector_id" xorm:"'sector_id'"`
 	CompanyID   uint64 `json:"company_id" xorm:"'company_id'"`
@@ -54,13 +54,13 @@ type Pdf struct {
 }
 
 type User struct {
-	ID        uint64   `json:"id" xorm:"'id' notnull pk autoincr"`
-	CompanyID uint64   `json:"company_id" xorm:"'company_id'"`
-	Name      string   `json:"name" xorm:"'name'"`
-	Email     string   `json:"email" xorm:"'email'"`
-	Password  string   `json:"password" xorm:"'password'"`
-	Type      UserRole `json:"type" xorm:"'type'"`
-	IsLogged  bool     `json:"isLogged" xorm:"'is_logged'"`
+	ID        uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
+	CompanyID uint64 `json:"company_id" xorm:"'company_id'"`
+	Name      string `json:"name" xorm:"'name'"`
+	Email     string `json:"email" xorm:"'email'"`
+	Password  string `json:"password" xorm:"'password'"`
+	Type      string `json:"type" xorm:"'type'"`
+	IsLogged  bool   `json:"isLogged" xorm:"'is_logged'"`
 }
 
 type Sector struct {
@@ -69,5 +69,13 @@ type Sector struct {
 	Name        string `json:"name" xorm:"'name'"`
 	Number      string `json:"number" xorm:"'number'"`
 	Description string `json:"description" xorm:"'description'"`
-	Content     []byte `json:"content" xorm:"'content BLOB'"`
+	Content     []byte `json:"content" xorm:"'content' BLOB"`
+}
+
+type SectorTest struct {
+	ID          uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
+	Name        string `json:"name" xorm:"'name'"`
+	Number      string `json:"number" xorm:"'number'"`
+	Description string `json:"description" xorm:"'description'"`
+	Content     []byte `json:"content" xorm:"'content' BLOB"`
 }

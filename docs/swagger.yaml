@@ -34,25 +34,6 @@ definitions:
       type:
         type: string
     type: object
-  db.Painel:
-    properties:
-      control_copy:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      number:
-        type: string
-      panel_type:
-        type: string
-      review:
-        type: string
-      sector_id:
-        type: integer
-    type: object
   db.Sector:
     properties:
       company_id:
@@ -68,6 +49,38 @@ definitions:
       name:
         type: string
       number:
+        type: string
+    type: object
+  db.SectorTest:
+    properties:
+      content:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      number:
+        type: string
+    type: object
+  db.User:
+    properties:
+      company_id:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      isLogged:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      type:
         type: string
     type: object
   erros.InternalServerError:
@@ -108,22 +121,20 @@ definitions:
     - password
     - type
     type: object
-  interfaces.PainelInput:
+  interfaces.NotConformInput:
     properties:
-      control_copy:
+      Desc:
         type: string
-      description:
+      Legal:
         type: string
-      name:
-        type: string
-      number:
-        type: string
-      panel_type:
-        type: string
-      review:
-        type: string
-      sector_id:
+      Number:
         type: integer
+      Recomended:
+        type: string
+      Tech:
+        type: string
+      Title:
+        type: string
     type: object
   interfaces.SectorInput:
     properties:
@@ -140,9 +151,67 @@ definitions:
       number:
         type: string
     type: object
+  interfaces.SectorInputTest:
+    properties:
+      content:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      name:
+        type: string
+      number:
+        type: string
+    type: object
+  interfaces.UserInput:
+    properties:
+      companyName:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      office:
+        type: integer
+      password:
+        type: string
+    required:
+    - companyName
+    - email
+    - name
+    - office
+    - password
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: 3.138.100.192:8080
 info:
   contact: {}
+  description: This is a server for app.
+  title: ConformeTec
+  version: "1.0"
 paths:
+  /all-find-painel:
+    get:
+      consumes:
+      - application/json
+      description: Procurar um Painel existente
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.SectorTest'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Puxa todos os painels
+      tags:
+      - Test
   /api/test-token:
     post:
       consumes:
@@ -165,7 +234,7 @@ paths:
       summary: Test Token
       tags:
       - Auth
-  /create-painels:
+  /create-painels-test:
     post:
       consumes:
       - application/json
@@ -176,21 +245,21 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/interfaces.PainelInput'
+          $ref: '#/definitions/interfaces.SectorInputTest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Painel'
+            $ref: '#/definitions/db.SectorTest'
         "500":
           description: Error
           schema:
             $ref: '#/definitions/erros.InternalServerError'
-      summary: Criar painel
+      summary: Criar painel Test
       tags:
-      - Sector
+      - Test
   /create-sector:
     post:
       consumes:
@@ -242,31 +311,6 @@ paths:
       summary: Procurar uma companhia
       tags:
       - Company
-  /find-painel:
-    get:
-      consumes:
-      - application/json
-      description: Procurar um Painel existente
-      parameters:
-      - description: Painel que deseja buscar
-        in: header
-        name: Painel
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/db.Painel'
-        "500":
-          description: Error
-          schema:
-            $ref: '#/definitions/erros.InternalServerError'
-      summary: Procurar um Painel
-      tags:
-      - Company
   /find-sector:
     get:
       consumes:
@@ -302,6 +346,174 @@ paths:
       summary: Procurar setor
       tags:
       - Sector
+  /find-user:
+    get:
+      consumes:
+      - application/json
+      description: Procurar um usuario existente
+      parameters:
+      - description: Rg do usuario
+        in: header
+        name: RG
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.User'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Procurar Usuario
+      tags:
+      - User
+  /insert-nc:
+    post:
+      consumes:
+      - application/json
+      description: Insere um novo registro NC
+      parameters:
+      - description: Dados de entrada para inserção
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/interfaces.NotConformInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: File uploaded successfully
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Inserir NC
+      tags:
+      - NC
+  /loggout:
+    put:
+      consumes:
+      - application/json
+      description: Altera o modo de login para false
+      parameters:
+      - description: Email do usuario
+        in: header
+        name: Email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "Result"}'
+          schema:
+            type: string
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Desconectar o usuario
+      tags:
+      - Login
+  /login:
+    put:
+      consumes:
+      - application/json
+      description: Altera o modo de login para true
+      parameters:
+      - description: Email do usuario
+        in: header
+        name: Email
+        required: true
+        type: string
+      - description: Senha do usuario
+        in: header
+        name: Password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "Result"}'
+          schema:
+            type: string
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Conectar o usuario
+      tags:
+      - Login
+  /pull-nc:
+    get:
+      consumes:
+      - application/json
+      description: Obtém registros NC com base nos parâmetros fornecidos
+      parameters:
+      - description: Email do usuario
+        in: header
+        name: Email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "Result"}'
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Obter NC
+      tags:
+      - NC
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Criar um usuario a partir das novas infos
+      parameters:
+      - description: Dados do campo a ser criado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/interfaces.UserInput'
+      - description: Tipo de usuário (Gerente da Planta 10, Profissional habilitado
+          responsável 11, Responsável pelo PIE 12, Profissional autorizado 13)
+        enum:
+        - 10
+        - 11
+        - 12
+        - 13
+        in: header
+        name: Office
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.User'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Criar um novo usuario
+      tags:
+      - User
   /register-company:
     post:
       consumes:
@@ -343,4 +555,7 @@ paths:
       summary: Criar token de auth
       tags:
       - Auth
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"

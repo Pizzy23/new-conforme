@@ -24,6 +24,8 @@ func ConnectDatabase() {
 	port := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
+	log.Printf("DB_USER: %s, DB_PASSWORD: %s, DB_HOST: %s, DB_PORT: %s, DB_NAME: %s\n", user, password, host, port, dbName)
+
 	if user == "" || password == "" || host == "" || port == "" || dbName == "" {
 		log.Fatal("Variáveis de ambiente do banco de dados não configuradas corretamente")
 	}
@@ -49,7 +51,7 @@ func ConnectDatabase() {
 
 func Migrate(engine *xorm.Engine) error {
 	tables := []interface{}{
-		new(Company), new(Word), new(Sector), new(NotConform), new(Painel), new(PDA), new(Pdf), new(User),
+		new(Company), new(Word), new(Sector), new(NotConform), new(Painel), new(Pda), new(Pdf), new(User), new(SectorTest),
 	}
 
 	for _, table := range tables {

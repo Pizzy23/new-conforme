@@ -42,3 +42,23 @@ func CreateUser(c *gin.Context, data interfaces.UserInput) {
 	c.Set("Response", "User Create")
 	c.Status(http.StatusOK)
 }
+
+func SearchUser(c *gin.Context, rg string) {
+	var User db.User
+	engine, ok := helpers.GetDBEngineFromContext(c)
+	if !ok {
+		c.Set("Error", "Database connection not found")
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	err := db.Read(engine, &User, rg)
+	if err != nil {
+		c.Set("Response", err.Error())
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	c.Set("Response", err)
+	c.Status(http.StatusOK)
+}

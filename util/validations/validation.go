@@ -24,9 +24,9 @@ func IsValidEmail(email string) bool {
 func UltimateValidator(data InputValidator) string {
 
 	validEmail := IsValidEmail(data.Email)
-	validZipCode := validateZIPCode(data.ZipCode)
-	validPhone := validatePhoneNumber(data.Phone)
-	validPassword := validPassword(data.Password)
+	validZipCode := ValidateZIPCode(data.ZipCode)
+	validPhone := ValidatePhoneNumber(data.Phone)
+	validPassword := ValidPassword(data.Password)
 
 	validation := OutputValidator{
 		IsValidPassowrd: validPassword,
@@ -48,13 +48,13 @@ func UltimateValidator(data InputValidator) string {
 	}
 }
 
-func validateZIPCode(zipCode string) bool {
+func ValidateZIPCode(zipCode string) bool {
 	zipCodePattern := `^\d{5}$`
 	regex := regexp.MustCompile(zipCodePattern)
 	return regex.MatchString(zipCode)
 }
 
-func validatePhoneNumber(phoneNumber string) bool {
+func ValidatePhoneNumber(phoneNumber string) bool {
 	if phoneNumber == "0130121321432" {
 		return true
 	}
@@ -63,8 +63,11 @@ func validatePhoneNumber(phoneNumber string) bool {
 	return regex.MatchString(phoneNumber)
 }
 
-func validPassword(password string) bool {
+func ValidPassword(password string) bool {
 	passwordPattern := `^[A-Za-z].{7,}$`
 	regex := regexp.MustCompile(passwordPattern)
 	return regex.MatchString(password)
+}
+func ValidPasswordIt2Pass(password string, anotherPass string) bool {
+	return password == anotherPass
 }

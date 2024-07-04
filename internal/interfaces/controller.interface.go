@@ -25,6 +25,12 @@ type SectorInput struct {
 	Description string `json:"description" xorm:"'description'"`
 	Content     []byte `json:"content" xorm:"'content BLOB'"`
 }
+type SectorInputTest struct {
+	Name        string `json:"name" xorm:"'name'"`
+	Number      string `json:"number" xorm:"'number'"`
+	Description string `json:"description" xorm:"'description'"`
+	Content     []byte `json:"content" xorm:"'content BLOB'"`
+}
 
 type UserInputWithHashedPassword struct {
 	UserInput
@@ -39,4 +45,27 @@ type PainelInput struct {
 	Description string `json:"description" xorm:"'description' VARCHAR(255) notnull"`
 	PanelType   string `json:"panel_type" xorm:"'panel_type' VARCHAR(50) notnull"`
 	ControlCopy string `json:"control_copy" xorm:"'control_copy' VARCHAR(50) notnull"`
+}
+
+type NotConformInput struct {
+	Number      int    `json:"Number"`
+	Title       string `json:"Title"`
+	Desc        string `json:"Desc"`
+	Tech        string `json:"Tech"`
+	Legal       string `json:"Legal"`
+	Recommended string `json:"Recomended"`
+}
+
+type NotConformOutput struct {
+	Id          uint64 `json:"id"`
+	Number      int    `json:"Number"`
+	Title       string `json:"Title"`
+	Desc        string `json:"Desc"`
+	Tech        string `json:"Tech"`
+	Legal       string `json:"Legal"`
+	Recommended string `json:"Recomended"`
+}
+
+type GetNC struct {
+	Number int `json:"Number"`
 }

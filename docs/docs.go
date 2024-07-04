@@ -15,6 +15,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/all-find-painel": {
+            "get": {
+                "description": "Procurar um Painel existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Puxa todos os painels",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.SectorTest"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/test-token": {
             "post": {
                 "description": "Cria um toke para auth do usuario",
@@ -48,7 +77,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/create-painels": {
+        "/create-painels-test": {
             "post": {
                 "description": "Criar um novo painel para uma empresa",
                 "consumes": [
@@ -58,9 +87,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Sector"
+                    "Test"
                 ],
-                "summary": "Criar painel",
+                "summary": "Criar painel Test",
                 "parameters": [
                     {
                         "description": "Dados do campo a ser criado",
@@ -68,7 +97,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/interfaces.PainelInput"
+                            "$ref": "#/definitions/interfaces.SectorInputTest"
                         }
                     }
                 ],
@@ -76,7 +105,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Painel"
+                            "$ref": "#/definitions/db.SectorTest"
                         }
                     },
                     "500": {
@@ -166,44 +195,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/find-painel": {
-            "get": {
-                "description": "Procurar um Painel existente",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Procurar um Painel",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Painel que deseja buscar",
-                        "name": "Painel",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/db.Painel"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/erros.InternalServerError"
-                        }
-                    }
-                }
-            }
-        },
         "/find-sector": {
             "get": {
                 "description": "Procurar um setor especifico",
@@ -245,6 +236,258 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/db.Sector"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/find-user": {
+            "get": {
+                "description": "Procurar um usuario existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Procurar Usuario",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Rg do usuario",
+                        "name": "RG",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.User"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/insert-nc": {
+            "post": {
+                "description": "Insere um novo registro NC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NC"
+                ],
+                "summary": "Inserir NC",
+                "parameters": [
+                    {
+                        "description": "Dados de entrada para inserção",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/interfaces.NotConformInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File uploaded successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/loggout": {
+            "put": {
+                "description": "Altera o modo de login para false",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Desconectar o usuario",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email do usuario",
+                        "name": "Email",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"Result\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "put": {
+                "description": "Altera o modo de login para true",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Conectar o usuario",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email do usuario",
+                        "name": "Email",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Senha do usuario",
+                        "name": "Password",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"Result\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/pull-nc": {
+            "get": {
+                "description": "Obtém registros NC com base nos parâmetros fornecidos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NC"
+                ],
+                "summary": "Obter NC",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email do usuario",
+                        "name": "Email",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"Result\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Criar um usuario a partir das novas infos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Criar um novo usuario",
+                "parameters": [
+                    {
+                        "description": "Dados do campo a ser criado",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/interfaces.UserInput"
+                        }
+                    },
+                    {
+                        "enum": [
+                            10,
+                            11,
+                            12,
+                            13
+                        ],
+                        "type": "integer",
+                        "description": "Tipo de usuário (Gerente da Planta 10, Profissional habilitado responsável 11, Responsável pelo PIE 12, Profissional autorizado 13)",
+                        "name": "Office",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.User"
                         }
                     },
                     "500": {
@@ -375,35 +618,6 @@ const docTemplate = `{
                 }
             }
         },
-        "db.Painel": {
-            "type": "object",
-            "properties": {
-                "control_copy": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "number": {
-                    "type": "string"
-                },
-                "panel_type": {
-                    "type": "string"
-                },
-                "review": {
-                    "type": "string"
-                },
-                "sector_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "db.Sector": {
             "type": "object",
             "properties": {
@@ -426,6 +640,55 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.SectorTest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "db.User": {
+            "type": "object",
+            "properties": {
+                "company_id": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isLogged": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -485,29 +748,26 @@ const docTemplate = `{
                 }
             }
         },
-        "interfaces.PainelInput": {
+        "interfaces.NotConformInput": {
             "type": "object",
             "properties": {
-                "control_copy": {
+                "Desc": {
                     "type": "string"
                 },
-                "description": {
+                "Legal": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
-                "number": {
-                    "type": "string"
-                },
-                "panel_type": {
-                    "type": "string"
-                },
-                "review": {
-                    "type": "string"
-                },
-                "sector_id": {
+                "Number": {
                     "type": "integer"
+                },
+                "Recomended": {
+                    "type": "string"
+                },
+                "Tech": {
+                    "type": "string"
+                },
+                "Title": {
+                    "type": "string"
                 }
             }
         },
@@ -533,18 +793,74 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "interfaces.SectorInputTest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "interfaces.UserInput": {
+            "type": "object",
+            "required": [
+                "companyName",
+                "email",
+                "name",
+                "office",
+                "password"
+            ],
+            "properties": {
+                "companyName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "office": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
         }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
+	Version:          "1.0",
+	Host:             "3.138.100.192:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "ConformeTec",
+	Description:      "This is a server for app.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

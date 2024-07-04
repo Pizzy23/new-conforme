@@ -109,13 +109,13 @@ func SearchPanelService(c *gin.Context, name string) {
 	var painel db.Painel
 	engine, ok := helpers.GetDBEngineFromContext(c)
 	if !ok {
-		c.Set("Error", "Database connection not found")
+		c.Set("Response", "Database connection not found")
 		c.Status(http.StatusInternalServerError)
 		return
 	}
 	found, err := db.GetByName(engine, &painel, name)
 	if err != nil {
-		c.Set("Error", err.Error())
+		c.Set("Response", err.Error())
 		c.Status(http.StatusInternalServerError)
 		return
 	}
@@ -126,4 +126,43 @@ func SearchPanelService(c *gin.Context, name string) {
 	}
 	c.Set("Response", painel)
 	c.Status(http.StatusOK)
+}
+
+func AllPanel(c *gin.Context) {
+	var Sector db.SectorTest
+	engine, ok := helpers.GetDBEngineFromContext(c)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to DB engine"})
+		return
+	}
+	err := db.GetAll(engine, &Sector)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, Sector)
+}
+
+func CreateSectorTestService(c *gin.Context, data interfaces.SectorInputTest) {
+	var Sector db.SectorTest
+	engine, ok := helpers.GetDBEngineFromContext(c)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to DB engine"})
+		return
+	}
+
+	Sector = db.SectorTest{
+		Name:        data.Name,
+		Number:      data.Number,
+		Description: data.Description,
+		Content:     data.Content,
+	}
+
+	err := db.Create(engine, &Sector)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"Response": Sector})
 }
