@@ -79,3 +79,8 @@ type SectorTest struct {
 	Description string `json:"description" xorm:"'description'"`
 	Content     []byte `json:"content" xorm:"'content' BLOB"`
 }
+
+type PdfTest struct {
+	ID      uint64 `json:"id" xorm:"'id' notnull pk autoincr"`
+	Content []byte `json:"content" xorm:"'content' BLOB"`
+}

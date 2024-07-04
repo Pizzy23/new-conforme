@@ -44,6 +44,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/all-find-pdfs": {
+            "get": {
+                "description": "Procurar um Painel existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Puxa todos os PDFs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.PdfTest"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/test-token": {
             "post": {
                 "description": "Cria um toke para auth do usuario",
@@ -415,6 +447,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/pdf-test": {
+            "post": {
+                "description": "Criar um novo painel para uma empresa",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Criar PDF No db",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Content",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.PdfTest"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/pull-nc": {
             "get": {
                 "description": "Obtém registros NC com base nos parâmetros fornecidos",
@@ -622,6 +695,20 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "db.PdfTest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },

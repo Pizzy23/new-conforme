@@ -74,3 +74,7 @@ type NotConformOutput struct {
 type GetNC struct {
 	Number int `json:"Number"`
 }
+
+type JustPDF struct {
+	Content []byte `json:"content" xorm:"'content BLOB'"`
+}
