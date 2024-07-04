@@ -233,7 +233,7 @@ paths:
   /create-painels-test:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Criar um novo painel para uma empresa
       parameters:
       - description: Dados do campo a ser criado

@@ -52,7 +52,7 @@ func SearchSector(c *gin.Context) {
 // @Summary Criar painel Test
 // @Tags Test
 // @Description Criar um novo painel para uma empresa
-// @Accept json
+// @Accept multipart/form-data
 // @Produce json
 // @Param request body interfaces.SectorInputTestNoBytes true "Dados do campo a ser criado"
 // @Param content formData file true "Content"

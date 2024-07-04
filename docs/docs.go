@@ -81,7 +81,7 @@ const docTemplate = `{
             "post": {
                 "description": "Criar um novo painel para uma empresa",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
