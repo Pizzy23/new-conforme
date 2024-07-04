@@ -51,7 +51,7 @@ func ConnectDatabase() {
 
 func Migrate(engine *xorm.Engine) error {
 	tables := []interface{}{
-		new(Company), new(Word), new(Sector), new(NotConform), new(Painel), new(Pda), new(Pdf), new(User), new(SectorTest),
+		new(Company), new(Word), new(Sector), new(NotConform), new(Painel), new(Pda), new(Pdf), new(User), new(SectorTest), new(PdfTest),
 	}
 
 	for _, table := range tables {
