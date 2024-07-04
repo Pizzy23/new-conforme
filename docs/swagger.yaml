@@ -151,12 +151,8 @@ definitions:
       number:
         type: string
     type: object
-  interfaces.SectorInputTest:
+  interfaces.SectorInputTestNoBytes:
     properties:
-      content:
-        items:
-          type: integer
-        type: array
       description:
         type: string
       name:
@@ -245,7 +241,12 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/interfaces.SectorInputTest'
+          $ref: '#/definitions/interfaces.SectorInputTestNoBytes'
+      - description: Content
+        in: formData
+        name: content
+        required: true
+        type: file
       produces:
       - application/json
       responses:

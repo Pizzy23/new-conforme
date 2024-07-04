@@ -31,6 +31,11 @@ type SectorInputTest struct {
 	Description string `json:"description" xorm:"'description'"`
 	Content     []byte `json:"content" xorm:"'content BLOB'"`
 }
+type SectorInputTestNoBytes struct {
+	Name        string `json:"name" xorm:"'name'"`
+	Number      string `json:"number" xorm:"'number'"`
+	Description string `json:"description" xorm:"'description'"`
+}
 
 type UserInputWithHashedPassword struct {
 	UserInput

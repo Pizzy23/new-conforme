@@ -97,8 +97,15 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/interfaces.SectorInputTest"
+                            "$ref": "#/definitions/interfaces.SectorInputTestNoBytes"
                         }
+                    },
+                    {
+                        "type": "file",
+                        "description": "Content",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -794,15 +801,9 @@ const docTemplate = `{
                 }
             }
         },
-        "interfaces.SectorInputTest": {
+        "interfaces.SectorInputTestNoBytes": {
             "type": "object",
             "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "description": {
                     "type": "string"
                 },

@@ -3,6 +3,7 @@ package sector
 import (
 	sector "conforme/internal/Sector/service"
 	"conforme/internal/interfaces"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,20 +54,44 @@ func SearchSector(c *gin.Context) {
 // @Description Criar um novo painel para uma empresa
 // @Accept json
 // @Produce json
-// @Param request body interfaces.SectorInputTest true "Dados do campo a ser criado"
+// @Param request body interfaces.SectorInputTestNoBytes true "Dados do campo a ser criado"
+// @Param content formData file true "Content"
 // @Success 200 {object} db.SectorTest
 // @Failure 500 {object} erros.InternalServerError "Error"
 // @Router /create-painels-test [post]
 func CreatePainelTest(c *gin.Context) {
-	var data interfaces.SectorInputTest
+	var input interfaces.SectorInputTestNoBytes
 
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.Set("Error", "Invalid parameters, need a JSON")
-		c.Status(http.StatusBadRequest)
+	file, err := c.FormFile("content")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file upload"})
 		return
 	}
 
+	// Open the file
+	fileContent, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file"})
+		return
+	}
+	defer fileContent.Close()
+
+	// Read the file content
+	contentBytes, err := ioutil.ReadAll(fileContent)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file"})
+		return
+	}
+
+	data := interfaces.SectorInputTest{
+		Name:        input.Name,
+		Number:      input.Number,
+		Description: input.Description,
+		Content:     contentBytes,
+	}
+
 	sector.CreateSectorTestService(c, data)
+
 }
 
 // @Summary Puxa todos os painels
