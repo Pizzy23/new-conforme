@@ -4,6 +4,7 @@ import (
 	"conforme/db"
 	"conforme/internal/interfaces"
 	"conforme/util/helpers"
+	"encoding/base64"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,23 @@ func AllPdfs(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	results := make(chan db.PdfTest, len(Pdfs))
+
+	convertToBase64 := func(pdf db.PdfTest, results chan<- db.PdfTest) {
+		pdf.Base64 = base64.StdEncoding.EncodeToString(pdf.Content)
+		pdf.Content = nil
+		results <- pdf
+	}
+
+	for _, pdf := range Pdfs {
+		go convertToBase64(pdf, results)
+	}
+
+	for i := range Pdfs {
+		Pdfs[i] = <-results
+	}
+
 	c.JSON(http.StatusOK, Pdfs)
 }
 
